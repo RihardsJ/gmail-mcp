@@ -1,0 +1,3 @@
+[default]
+server_name = "gmail-mcp-server"
+max_email_limit = 5
