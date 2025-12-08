@@ -24,7 +24,8 @@ This project is a Model Context Protocol (MCP) server that enables AI assistants
 ### Core Requirements
 
 - [x] **Gmail API Setup**: Google Cloud project, OAuth2 configuration, scopes
-- [ ] **MCP Server**: Python implementation with mcp SDK
+- [x] **MCP Server**: Python implementation with mcp SDK
+- [ ] **Authorization**: OAuth2 authentication for Gmail API
 - [ ] **Email Retrieval Tool**: `get_unread_emails` with required fields
 - [ ] **Draft Reply Tool**: `create_draft_reply` with threading
 - [ ] **Claude Desktop Integration**: Local server configuration and testing
@@ -53,24 +54,24 @@ This project is a Model Context Protocol (MCP) server that enables AI assistants
 3. Configure OAuth2 (scopes: gmail.readonly, gmail.compose)
 4. Download credentials.json
 
-### Usage with Claude Desktop (stdio Transport):
+### Usage with Claude Desktop (streamable-http transport layer):
 
 ```json
 {
   "mcpServers": {
-    "email": {
-      "command": "/full/path/to/your/venv/bin/python",
-      "args": ["/full/path/to/your/email_server.py"],
-      "env": {
-        "EMAIL_USER": "your-email@gmail.com",
-        "EMAIL_APP_PASSWORD": "your-16-char-app-password"
-      }
+    "gmail-mcp-server": {
+      TODO: add instructions
     }
   }
 }
 ```
 
 ## Example Usage
+
+1. Start mcp server: `docker-compose up -d`
+2. Stop mcp server: `docker-compose down`
+3. View logs: `docker-compose logs -f`
+4. Start inspector (for debugging): `npx @modelcontextprotocol/inspector`
 
 ### Sample Prompts
 

@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  gmail-mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.alpine
+    container_name: gmail-mcp-server-alpine
+    image: gmail-mcp-server:alpine
+
+    ports:
+      - "8200:8200"
+
+    environment:
+      - DYNACONF_HOST=0.0.0.0
+      - DYNACONF_PORT=8200
+      - DYNACONF_LOG_LEVEL=info
+      - DYNACONF_SERVER_NAME=gmail-mcp-server
+      - DYNACONF_MAX_EMAIL_LIMIT=10
+
+    volumes:
+      - ./configs:/app/configs:ro
+      - ./logs:/app/logs
+
+    restart: unless-stopped
+
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8200/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+    networks:
+      - mcp-network
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  mcp-network:
+    driver: bridge
+    name: mcp-network-alpine
+
+volumes:
+  logs:
+    name: gmail-mcp-logs-alpine
