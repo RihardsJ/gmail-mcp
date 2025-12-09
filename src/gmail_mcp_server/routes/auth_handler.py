@@ -1,6 +1,6 @@
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, RedirectResponse
 
 from ..configs import configs
 
@@ -8,9 +8,8 @@ from ..configs import configs
 async def auth_handler(request):
     """Handle  authentication requests."""
 
-    print("Auth handler called")
-    print(configs.CLIENT_SECRET)
-    print(configs.scopes)
+    print(configs.get("SECRET_FILE"))
+    print(configs.get("scopes"))
 
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
         configs.SECRET_FILE, scopes=configs.scopes
@@ -38,12 +37,12 @@ async def auth_handler(request):
         prompt="consent",
     )
 
-    print(authorization_url)
+    return RedirectResponse(authorization_url)
 
     return JSONResponse(
         {
             "status": "success",
-            "message": "Authentication successful! Please close the browser tab.",
+            "datamessage": "Authentication successful! Please close the browser tab.",
             "timestamp": str(__import__("datetime").datetime.now().isoformat()),
         }
     )

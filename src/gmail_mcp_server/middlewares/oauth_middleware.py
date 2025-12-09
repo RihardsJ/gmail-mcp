@@ -39,7 +39,11 @@ class OAuthMiddleware(AuthenticationBackend):
             AuthenticationError: If authentication is required but token is invalid
         """
         # Skip authentication for public endpoints
-        if conn.url.path in ["/health", "/.well-known/oauth-protected-resource"]:
+        if conn.url.path in [
+            "/health",
+            "/auth",
+            "/.well-known/oauth-protected-resource",
+        ]:
             return
 
         # Check if Authorization header exists
