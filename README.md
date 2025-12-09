@@ -68,10 +68,18 @@ This project is a Model Context Protocol (MCP) server that enables AI assistants
 
 ## Example Usage
 
+### Run server in container
+
 1. Start mcp server: `docker-compose up -d`
 2. Stop mcp server: `docker-compose down`
 3. View logs: `docker-compose logs -f`
 4. Start inspector (for debugging): `npx @modelcontextprotocol/inspector`
+
+### Run local server
+
+1. `source venv/bin/activate`
+2. Install dependencies: `uv install`
+3. Start server: `uv run python main.py`
 
 ### Sample Prompts
 
