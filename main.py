@@ -6,7 +6,6 @@ This server uses the low-level MCP Server API with manual ASGI setup.
 Run with: python main.py or uv run python main.py
 """
 
-import asyncio
 import logging
 from typing import Any
 
@@ -19,6 +18,7 @@ from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
 
 from configs.config import configs
+from utils import print_terminal_banner
 
 # Configure logging to suppress harmless cleanup errors in stateless mode
 logging.getLogger("mcp.server.streamable_http").setLevel(logging.CRITICAL)
@@ -140,39 +140,10 @@ def main():
     host = configs.get("host", "0.0.0.0")
     port = configs.get("port", 8100)
     log_level = configs.get("log_level", "info")
-    server_url = f"http://{host}:{port}/mcp"
-
-    # Terminal launch banner with instructions
-    print()
-    print("╔════════════════════════════════════════════════════════════════╗")
-    print("║                                                                ║")
-    print("║               📬  GMAIL MCP SERVER                             ║")
-    print("║                                                                ║")
-    print("╚════════════════════════════════════════════════════════════════╝")
-    print()
-    print("  🚀  Status      Starting server...")
-    print(f"  🌐  Endpoint    {server_url}")
-    print(f"  🖥️   Host        {host}")
-    print(f"  🔌  Port        {port}")
-    print("  📡  Transport   Streamable HTTP")
-    print()
-    print("┌────────────────────────────────────────────────────────────────┐")
-    print("│  🧪  TESTING WITH MCP INSPECTOR                                │")
-    print("├────────────────────────────────────────────────────────────────┤")
-    print("│                                                                │")
-    print("│  1. Run inspector:                                             │")
-    print("│     npx @modelcontextprotocol/inspector                        │")
-    print("│                                                                │")
-    print(f"│  2. Connect to: {server_url:<46} │")
-    print("│                                                                │")
-    print("└────────────────────────────────────────────────────────────────┘")
-    print()
-    print("  💡  TIP: Press Ctrl+C to stop the server")
-    print()
-    print("═" * 64)
-    print()
 
     app = create_app()
+
+    print_terminal_banner(port, host)
 
     # Run with uvicorn
     uvicorn.run(
