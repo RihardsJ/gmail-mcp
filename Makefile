@@ -4,6 +4,7 @@
 help:
 	@echo "Available commands:"
 	@echo "  make run             - Run the server locally using uv"
+	@echo "  make dev             - Run the server in development mode with auto-reload"
 	@echo "  make inspector       - Run MCP Inspector"
 	@echo "  make docker-build    - Build the Docker image"
 	@echo "  make docker-up       - Start the Docker container"
@@ -15,6 +16,10 @@ help:
 # Run locally
 run:
 	uv run python main.py
+
+# Run in development mode with auto-reload
+dev:
+	uv run uvicorn main:app --factory --reload --host 0.0.0.0 --port 8100
 
 # MCP Inspector
 inspector:

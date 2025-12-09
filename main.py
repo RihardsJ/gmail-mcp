@@ -11,14 +11,20 @@ from typing import Any
 
 import mcp.types as types
 import uvicorn
-from mcp.server.lowlevel import NotificationOptions, Server
-from mcp.server.models import InitializationOptions
+from mcp.server.lowlevel import Server
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
+from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.middleware.cors import CORSMiddleware
 
-from configs.config import configs
-from utils import print_terminal_banner
+from src.gmail_mcp_server.configs import configs
+from src.gmail_mcp_server.middlewares import OAuthMiddleware, handle_oauth_error
+from src.gmail_mcp_server.routes import (
+    auth_handler,
+    health_check_handler,
+    oauth_protected_resource_handler,
+)
+from src.gmail_mcp_server.utils import print_terminal_banner
 
 # Configure logging to suppress harmless cleanup errors in stateless mode
 logging.getLogger("mcp.server.streamable_http").setLevel(logging.CRITICAL)
@@ -82,7 +88,6 @@ def create_app() -> Starlette:
     from contextlib import asynccontextmanager
 
     from mcp.server.streamable_http_manager import StreamableHTTPSessionManager
-    from starlette.responses import JSONResponse
     from starlette.routing import Mount, Route
 
     # Create session manager for streamable HTTP
@@ -100,21 +105,17 @@ def create_app() -> Starlette:
         async with session_manager.run():
             yield
 
-    async def health_check(request):
-        """Health check endpoint for Docker and monitoring."""
-        return JSONResponse(
-            {
-                "status": "healthy",
-                "service": "gmail-mcp-server",
-                "timestamp": str(__import__("datetime").datetime.now().isoformat()),
-            }
-        )
-
     # Create the Starlette app with CORS support
     # Mount the session manager directly at root since it handles all MCP endpoints
     app = Starlette(
         routes=[
-            Route("/health", health_check, methods=["GET"]),
+            Route("/health", health_check_handler, methods=["GET"]),
+            Route("/auth", auth_handler, methods=["GET"]),
+            Route(
+                "/.well-known/oauth-protected-resource",
+                oauth_protected_resource_handler,
+                methods=["GET"],
+            ),
             Mount("/", app=session_manager.handle_request),
         ],
         middleware=[
@@ -126,11 +127,30 @@ def create_app() -> Starlette:
                 allow_headers=["*"],
                 expose_headers=["Mcp-Session-Id"],  # Required for MCP Inspector
             ),
+            Middleware(
+                AuthenticationMiddleware,
+                backend=OAuthMiddleware(),
+                on_error=handle_oauth_error,
+            ),
         ],
         lifespan=lifespan,
     )
 
     return app
+
+
+def app() -> Starlette:
+    """
+    Factory function for uvicorn --factory mode.
+
+    This allows uvicorn to reload the app when files change in dev mode.
+    Usage: uvicorn main:app --factory --reload
+    """
+
+    host = configs.get("host", "0.0.0.0")
+    port = configs.get("port", 8100)
+    print_terminal_banner(port, host)
+    return create_app()
 
 
 def main():
@@ -140,14 +160,13 @@ def main():
     host = configs.get("host", "0.0.0.0")
     port = configs.get("port", 8100)
     log_level = configs.get("log_level", "info")
-
-    app = create_app()
+    application = create_app()
 
     print_terminal_banner(port, host)
 
     # Run with uvicorn
     uvicorn.run(
-        app,
+        application,
         host=host,
         port=port,
         log_level=log_level,
