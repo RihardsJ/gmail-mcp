@@ -1,14 +1,49 @@
+import google.oauth2.credentials
+import google_auth_oauthlib.flow
 from starlette.responses import JSONResponse
+
+from ..configs import configs
 
 
 async def auth_handler(request):
-    """Handle authentication requests."""
+    """Handle  authentication requests."""
 
-    # TODO: Implement authentication logic here
+    print("Auth handler called")
+    print(configs.CLIENT_SECRET)
+    print(configs.scopes)
+
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
+        configs.SECRET_FILE, scopes=configs.scopes
+    )
+
+    # Required, indicate where the API server will redirect the user after the user completes
+    # the authorization flow. The redirect URI is required. The value must exactly
+    # match one of the authorized redirect URIs for the OAuth 2.0 client, which you
+    # configured in the API Console. If this value doesn't match an authorized URI,
+    # you will get a 'redirect_uri_mismatch' error.
+    flow.redirect_uri = "http://localhost:8100/mcp"
+
+    # Generate URL for request to Google's OAuth 2.0 server.
+    # Use kwargs to set optional request parameters.
+    authorization_url, state = flow.authorization_url(
+        # Recommended, enable offline access so that you can refresh an access token without
+        # re-prompting the user for permission. Recommended for web server apps.
+        access_type="offline",
+        # Optional, enable incremental authorization. Recommended as a best practice.
+        include_granted_scopes="true",
+        # Optional, if your application knows which user is trying to authenticate, it can use this
+        # parameter to provide a hint to the Google Authentication Server.
+        login_hint="rihards.jukna@gmail.com",
+        # Optional, set prompt to 'consent' will prompt the user for consent
+        prompt="consent",
+    )
+
+    print(authorization_url)
 
     return JSONResponse(
         {
-            "token": "generated_token_ABX",
+            "status": "success",
+            "message": "Authentication successful! Please close the browser tab.",
             "timestamp": str(__import__("datetime").datetime.now().isoformat()),
         }
     )

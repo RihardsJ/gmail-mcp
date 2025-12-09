@@ -40,7 +40,7 @@ class OAuthMiddleware(AuthenticationBackend):
         """
         # Skip authentication for public endpoints
         if conn.url.path in ["/health", "/.well-known/oauth-protected-resource"]:
-            return None
+            return
 
         # Check if Authorization header exists
         if "Authorization" not in conn.headers:
@@ -76,14 +76,14 @@ class OAuthMiddleware(AuthenticationBackend):
             raise AuthenticationError("Invalid Authorization header format")
 
 
-def handle_oauth_error(request: Request, exc: Exception) -> Response:
+def handle_oauth_error(conn: HTTPConnection, exc: AuthenticationError) -> Response:
     """
     Custom error handler for authentication errors.
     Returns 401 with the MCP-specific WWW-Authenticate header.
     """
     # Construct the PRM document URL
-    host = request.headers.get("Host", "localhost:8100")
-    scheme = "https" if request.url.scheme == "https" else "http"
+    host = conn.headers.get("Host", "localhost:8100")
+    scheme = "https" if conn.url.scheme == "https" else "http"
     prm_url = f"{scheme}://{host}/.well-known/oauth-protected-resource"
 
     return JSONResponse(
