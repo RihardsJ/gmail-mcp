@@ -24,6 +24,7 @@ from src.gmail_mcp_server.routes import (
     health_check_controller,
     oauth_authorization_controller,
     oauth_callback_controller,
+    oauth_metadata_controller,
     oauth_protected_resource_controller,
 )
 from src.gmail_mcp_server.utils import print_terminal_banner
@@ -114,6 +115,11 @@ def create_app() -> Starlette:
             Route("/health", health_check_controller, methods=["GET"]),
             Route("/oauth/authorize", oauth_authorization_controller, methods=["GET"]),
             Route("/oauth/callback", oauth_callback_controller, methods=["GET"]),
+            Route(
+                "/.well-known/oauth-authorization-server/oauth",
+                oauth_metadata_controller,
+                methods=["GET"],
+            ),
             Route(
                 "/.well-known/oauth-protected-resource",
                 oauth_protected_resource_controller,

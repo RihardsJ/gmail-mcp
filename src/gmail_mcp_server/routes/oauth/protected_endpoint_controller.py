@@ -33,7 +33,7 @@ def oauth_protected_resource_controller(request: Request) -> JSONResponse:
 
     prm_document = {
         "resource": f"{base_url}/mcp",
-        "authorization_servers": [f"{base_url}/auth"],
+        "authorization_servers": [f"{base_url}/oauth"],
         "scopes_supported": [
             "mcp:tools",
             "mcp:resources",

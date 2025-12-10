@@ -8,8 +8,6 @@ from ...configs import configs
 async def oauth_callback_controller(request):
     """Handle OAuth callback requests."""
 
-    print("[callback] oauth_state:", request.session.get("oauth_state"))
-
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
         configs.SECRET_FILE,
         scopes=configs.scopes,

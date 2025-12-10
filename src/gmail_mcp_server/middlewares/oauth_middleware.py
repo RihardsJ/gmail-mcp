@@ -44,8 +44,12 @@ class OAuthMiddleware(AuthenticationBackend):
             "/oauth/authorize",
             "/oauth/callback",
             "/.well-known/oauth-protected-resource",
+            "/.well-known/oauth-authorization-server",
+            "/.well-known/oauth-authorization-server/oauth",
         ]:
             return
+
+        print(conn.url.path)
 
         # Check if Authorization header exists
         if "Authorization" not in conn.headers:
