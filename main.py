@@ -13,8 +13,9 @@ from src.gmail_mcp_server.server import mcp_server
 SERVER_NAME = configs.get("server_name")
 SERVER_VERSION = configs.get("server_version")
 
-# Configure logging to suppress harmless cleanup errors in stateless mode
-logging.getLogger(SERVER_NAME).setLevel(logging.CRITICAL)
+# Configure logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+logging.getLogger(SERVER_NAME)
 
 
 async def main():
