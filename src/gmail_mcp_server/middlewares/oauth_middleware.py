@@ -41,7 +41,8 @@ class OAuthMiddleware(AuthenticationBackend):
         # Skip authentication for public endpoints
         if conn.url.path in [
             "/health",
-            "/auth",
+            "/oauth/authorize",
+            "/oauth/callback",
             "/.well-known/oauth-protected-resource",
         ]:
             return

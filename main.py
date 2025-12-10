@@ -16,13 +16,15 @@ from starlette.applications import Starlette
 from starlette.middleware import Middleware
 from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 
 from src.gmail_mcp_server.configs import configs
 from src.gmail_mcp_server.middlewares import OAuthMiddleware, handle_oauth_error
 from src.gmail_mcp_server.routes import (
-    auth_handler,
-    health_check_handler,
-    oauth_protected_resource_handler,
+    health_check_controller,
+    oauth_authorization_controller,
+    oauth_callback_controller,
+    oauth_protected_resource_controller,
 )
 from src.gmail_mcp_server.utils import print_terminal_banner
 
@@ -109,11 +111,12 @@ def create_app() -> Starlette:
     # Mount the session manager directly at root since it handles all MCP endpoints
     app = Starlette(
         routes=[
-            Route("/health", health_check_handler, methods=["GET"]),
-            Route("/auth", auth_handler, methods=["GET"]),
+            Route("/health", health_check_controller, methods=["GET"]),
+            Route("/oauth/authorize", oauth_authorization_controller, methods=["GET"]),
+            Route("/oauth/callback", oauth_callback_controller, methods=["GET"]),
             Route(
                 "/.well-known/oauth-protected-resource",
-                oauth_protected_resource_handler,
+                oauth_protected_resource_controller,
                 methods=["GET"],
             ),
             Mount("/", app=session_manager.handle_request),
@@ -126,6 +129,10 @@ def create_app() -> Starlette:
                 allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
                 allow_headers=["*"],
                 expose_headers=["Mcp-Session-Id"],  # Required for MCP Inspector
+            ),
+            Middleware(
+                SessionMiddleware,
+                secret_key=configs.get("session_secret", "default_secret_key"),
             ),
             Middleware(
                 AuthenticationMiddleware,

@@ -14,7 +14,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 
-def oauth_protected_resource_handler(request: Request) -> JSONResponse:
+def oauth_protected_resource_controller(request: Request) -> JSONResponse:
     """
     Serves the Protected Resource Metadata (PRM) document.
 
