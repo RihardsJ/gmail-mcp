@@ -39,8 +39,17 @@ class OAuthMiddleware(AuthenticationBackend):
             AuthenticationError: If authentication is required but token is invalid
         """
         # Skip authentication for public endpoints
-        if conn.url.path in ["/health", "/.well-known/oauth-protected-resource"]:
-            return None
+        if conn.url.path in [
+            "/health",
+            "/oauth/authorize",
+            "/oauth/callback",
+            "/.well-known/oauth-protected-resource",
+            "/.well-known/oauth-authorization-server",
+            "/.well-known/oauth-authorization-server/oauth",
+        ]:
+            return
+
+        print(conn.url.path)
 
         # Check if Authorization header exists
         if "Authorization" not in conn.headers:
@@ -76,14 +85,14 @@ class OAuthMiddleware(AuthenticationBackend):
             raise AuthenticationError("Invalid Authorization header format")
 
 
-def handle_oauth_error(request: Request, exc: Exception) -> Response:
+def handle_oauth_error(conn: HTTPConnection, exc: AuthenticationError) -> Response:
     """
     Custom error handler for authentication errors.
     Returns 401 with the MCP-specific WWW-Authenticate header.
     """
     # Construct the PRM document URL
-    host = request.headers.get("Host", "localhost:8100")
-    scheme = "https" if request.url.scheme == "https" else "http"
+    host = conn.headers.get("Host", "localhost:8100")
+    scheme = "https" if conn.url.scheme == "https" else "http"
     prm_url = f"{scheme}://{host}/.well-known/oauth-protected-resource"
 
     return JSONResponse(

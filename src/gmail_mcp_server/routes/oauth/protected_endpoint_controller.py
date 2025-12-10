@@ -14,7 +14,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 
-def oauth_protected_resource_handler(request: Request) -> JSONResponse:
+def oauth_protected_resource_controller(request: Request) -> JSONResponse:
     """
     Serves the Protected Resource Metadata (PRM) document.
 
@@ -33,7 +33,7 @@ def oauth_protected_resource_handler(request: Request) -> JSONResponse:
 
     prm_document = {
         "resource": f"{base_url}/mcp",
-        "authorization_servers": [f"{base_url}/auth"],
+        "authorization_servers": [f"{base_url}/oauth"],
         "scopes_supported": [
             "mcp:tools",
             "mcp:resources",

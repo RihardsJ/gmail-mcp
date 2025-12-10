@@ -4,3 +4,7 @@ max_email_limit = 5
 host = "0.0.0.0"
 port = 8100
 log_level = "info"
+scopes = [
+    "https://www.googleapis.com/auth/gmail.compose",
+    "https://www.googleapis.com/auth/gmail.readonly",
+]

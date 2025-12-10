@@ -1,8 +1,9 @@
 from starlette.responses import JSONResponse
 
 
-async def health_check_handler(request):
-    """Health check endpoint for Docker and monitoring."""
+async def health_check_controller(request):
+    """Health check controller for Docker and monitoring."""
+
     return JSONResponse(
         {
             "status": "healthy",
