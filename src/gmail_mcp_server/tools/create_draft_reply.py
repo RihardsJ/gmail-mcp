@@ -14,7 +14,7 @@ class ReplyArgs(TypedDict):
     reply_body: str
 
 
-def validate_arguments(arguments: dict) -> ReplyArgs:
+def _validate_arguments(arguments: dict) -> ReplyArgs:
     """
     Helper function to validate arguments for create_draft_reply.
     """
@@ -33,9 +33,6 @@ def validate_arguments(arguments: dict) -> ReplyArgs:
         return {"thread_id": thread_id, "reply_body": reply_body}
 
 
-__all__ = ["create_draft_reply"]
-
-
 async def create_draft_reply(arguments: dict) -> list[types.TextContent]:
     """
     This MCP tool creates a draft reply for an email.
@@ -50,7 +47,7 @@ async def create_draft_reply(arguments: dict) -> list[types.TextContent]:
         await create_draft_reply({"thread_id": "1234567890", "reply_body": "Hello, world!"})
     """
 
-    validated_args = validate_arguments(arguments)
+    validated_args = _validate_arguments(arguments)
     thread_id = validated_args["thread_id"]
     reply_body = validated_args["reply_body"]
 

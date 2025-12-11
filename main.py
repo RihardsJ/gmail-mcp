@@ -7,8 +7,7 @@ import mcp.server.stdio
 from mcp.server.lowlevel import NotificationOptions
 from mcp.server.models import InitializationOptions
 
-from src.gmail_mcp_server.configs import configs
-from src.gmail_mcp_server.server import mcp_server
+from src.gmail_mcp_server import configs, mcp_server
 
 SERVER_NAME = configs.get("server_name")
 SERVER_VERSION = configs.get("server_version")
