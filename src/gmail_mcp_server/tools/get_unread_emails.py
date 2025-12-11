@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import asyncio
+import base64
 import logging
 
 import mcp.types as types
@@ -44,19 +45,49 @@ async def get_unread_emails(limit: int = 5) -> list[types.TextContent]:
             .list(userId="me", labelIds=["UNREAD"], maxResults=limit)
             .execute()
         )
-        messages = unread_email_data.get("messages", [])
+        message_ids = unread_email_data.get("messages", [])
 
-        if not messages:
+        if not message_ids:
             logger.warning("No unread emails found")
             return []
 
-        message_content = await list_all_email_content(
-            gmail_service, [message["id"] for message in messages]
+        messages = await list_all_email_content(
+            gmail_service, [message_id["id"] for message_id in message_ids]
         )
 
-        # TODO: Extract text content from email messages
+        results = []
+        for msg in messages:
+            headers = msg["payload"]["headers"]
+            sender = next(
+                (
+                    header["value"]
+                    for header in headers
+                    if header["name"].lower() == "from"
+                ),
+                None,
+            )
+            subject = next(
+                (
+                    header["value"]
+                    for header in headers
+                    if header["name"].lower() == "subject"
+                ),
+                None,
+            )
 
-        return message_content
+            body = _get_email_body(msg)
+
+            results.append(
+                {
+                    "id": msg["id"],
+                    "thread_id": msg["threadId"],
+                    "sender": sender,
+                    "subject": subject,
+                    "body": body,
+                }
+            )
+
+        return results
 
     except HttpError as e:
         errMessage = f"Gmail API Error: {str(e)}"
@@ -83,3 +114,27 @@ async def list_all_email_content(gmail_service, message_ids):
     ]
     email_data_list = await asyncio.gather(*tasks)
     return email_data_list
+
+
+async def _get_email_body(payload: dict) -> str:
+    """
+    Extract email body from message payload
+
+    Args:
+        payload (dict): Message payload
+
+    Returns:
+        str: Email body
+    """
+
+    if "parts" in payload:
+        for part in payload["parts"]:
+            if part["mimeType"] == "text/plain":
+                if "data" in part["body"]:
+                    return base64.urlsafe_b64decode(part["body"]["data"]).decode()
+
+    # Fallback to body data if available
+    if "body" in payload and "data" in payload["body"]:
+        return base64.urlsafe_b64decode(payload["body"]["data"]).decode()
+
+    return ""
