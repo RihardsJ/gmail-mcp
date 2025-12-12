@@ -10,6 +10,11 @@ from googleapiclient.errors import HttpError
 
 from ..configs import configs
 from ..services.gmail_api_service import get_gmail_api_service
+from ..utils import (
+    build_threading_headers,
+    ensure_reply_subject,
+    get_header_value,
+)
 
 email_user = configs.get("email_user")
 logger = logging.getLogger(__name__)
@@ -18,25 +23,6 @@ logger = logging.getLogger(__name__)
 class ReplyArgs(TypedDict):
     thread_id: str
     reply_body: str
-
-
-def _validate_arguments(arguments: dict) -> ReplyArgs:
-    """
-    Helper function to validate arguments for create_draft_reply.
-    """
-    thread_id = arguments.get("thread_id")
-    reply_body = arguments.get("reply_body")
-
-    if not thread_id:
-        raise ValueError(
-            "Missing thread_id argument",
-        )
-    elif not reply_body:
-        raise ValueError(
-            "Missing reply_body argument",
-        )
-    else:
-        return {"thread_id": thread_id, "reply_body": reply_body}
 
 
 async def create_draft_reply(arguments: dict) -> list[types.TextContent]:
@@ -63,7 +49,7 @@ async def create_draft_reply(arguments: dict) -> list[types.TextContent]:
         logger.debug("Initializing Gmail API service")
         gmail_service = get_gmail_api_service()
 
-        # Get the original thread to extract necessary headers for proper threading
+        # Get the original thread to extract necessary headers for accurate threading
         logger.info(f"Retrieving thread {thread_id} to get original message details")
         thread = (
             gmail_service.users().threads().get(userId="me", id=thread_id).execute()
@@ -77,51 +63,23 @@ async def create_draft_reply(arguments: dict) -> list[types.TextContent]:
         headers = original_message["payload"]["headers"]
 
         # Extract necessary headers for threading
-        subject = next(
-            (
-                header["value"]
-                for header in headers
-                if header["name"].lower() == "subject"
-            ),
-            "",
-        )
-        message_id = next(
-            (
-                header["value"]
-                for header in headers
-                if header["name"].lower() == "message-id"
-            ),
-            None,
-        )
-        references = next(
-            (
-                header["value"]
-                for header in headers
-                if header["name"].lower() == "references"
-            ),
-            None,
-        )
+        subject = get_header_value(headers, "subject", "")
+        message_id = get_header_value(headers, "message-id")
+        references = get_header_value(headers, "references")
+        from_email = get_header_value(headers, "from", "") or ""
 
         # Ensure subject has "Re: " prefix if not already present
-        if not subject.lower().startswith("re:"):
-            subject = f"Re: {subject}"
+        subject = ensure_reply_subject(subject)
 
         # Create the MIME message
         message = MIMEText(reply_body)
-        message["to"] = next(
-            (header["value"] for header in headers if header["name"].lower() == "from"),
-            "",
-        )
+        message["to"] = from_email
         message["subject"] = subject
 
         # Add threading headers
-        if message_id:
-            message["In-Reply-To"] = message_id
-            # Build References header (includes previous references + the message we're replying to)
-            if references:
-                message["References"] = f"{references} {message_id}"
-            else:
-                message["References"] = message_id
+        threading_headers = build_threading_headers(message_id, references)
+        for header_name, header_value in threading_headers.items():
+            message[header_name] = header_value
 
         # Encode the message
         raw_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
@@ -165,3 +123,22 @@ async def create_draft_reply(arguments: dict) -> list[types.TextContent]:
                 text=f"Error creating draft reply: {error_msg}",
             )
         ]
+
+
+def _validate_arguments(arguments: dict) -> ReplyArgs:
+    """
+    Helper function to validate arguments for create_draft_reply.
+    """
+    thread_id = arguments.get("thread_id")
+    reply_body = arguments.get("reply_body")
+
+    if not thread_id:
+        raise ValueError(
+            "Missing thread_id argument",
+        )
+    elif not reply_body:
+        raise ValueError(
+            "Missing reply_body argument",
+        )
+    else:
+        return {"thread_id": thread_id, "reply_body": reply_body}
