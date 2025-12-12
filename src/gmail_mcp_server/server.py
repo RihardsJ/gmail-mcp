@@ -6,8 +6,6 @@ from mcp.server import Server
 from .configs import configs
 from .tools import create_draft_reply, get_unread_emails
 
-__all__ = ["mcp_server"]
-
 mcp_server = Server(configs["server_name"])
 
 
