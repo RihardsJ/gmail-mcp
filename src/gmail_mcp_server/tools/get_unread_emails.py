@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 
 import asyncio
-import base64
 import logging
 
 import mcp.types as types
 from googleapiclient.errors import HttpError
 
 from ..services.gmail_api_service import get_gmail_api_service
+from ..utils import format_email_for_display
 
 logger = logging.getLogger(__name__)
 
@@ -51,41 +51,13 @@ async def get_unread_emails(limit: int = 5) -> list[types.TextContent]:
             logger.warning("No unread emails found")
             return []
 
-        messages = await list_all_email_content(
+        messages = await _list_all_email_content(
             gmail_service, [message_id["id"] for message_id in message_ids]
         )
 
         results = []
         for msg in messages:
-            headers = msg["payload"]["headers"]
-            sender = next(
-                (
-                    header["value"]
-                    for header in headers
-                    if header["name"].lower() == "from"
-                ),
-                None,
-            )
-            subject = next(
-                (
-                    header["value"]
-                    for header in headers
-                    if header["name"].lower() == "subject"
-                ),
-                None,
-            )
-            date = next(
-                (
-                    header["value"]
-                    for header in headers
-                    if header["name"].lower() == "date"
-                ),
-                None,
-            )
-
-            body = _get_email_body(msg["payload"])
-
-            email_text = f"ID: {msg['id']}\nThread ID: {msg['threadId']}\nDate: {date}\nFrom: {sender}\nSubject: {subject}\n\nBody:\n{body}\n"
+            email_text = format_email_for_display(msg)
             results.append(types.TextContent(type="text", text=email_text))
 
         return results
@@ -108,57 +80,10 @@ async def _get_email_content(gmail_service, message_id):
     return email_data
 
 
-async def list_all_email_content(gmail_service, message_ids):
+async def _list_all_email_content(gmail_service, message_ids):
     """Retrieve email data for a list of message IDs in parallel"""
     tasks = [
         _get_email_content(gmail_service, message_id) for message_id in message_ids
     ]
     email_data_list = await asyncio.gather(*tasks)
     return email_data_list
-
-
-def _get_email_body(payload: dict) -> str:
-    """
-    Extract email body from message payload
-
-    Args:
-        payload (dict): Message payload
-
-    Returns:
-        str: Email body
-    """
-
-    def extract_text_from_parts(parts):
-        """Recursively extract text from email parts"""
-        for part in parts:
-            mime_type = part.get("mimeType", "")
-
-            # Check if this part has nested parts
-            if "parts" in part:
-                text = extract_text_from_parts(part["parts"])
-                if text:
-                    return text
-
-            # Try to get text/plain content
-            if mime_type == "text/plain" and "data" in part.get("body", {}):
-                return base64.urlsafe_b64decode(part["body"]["data"]).decode()
-
-        # If no text/plain found, try text/html as fallback
-        for part in parts:
-            mime_type = part.get("mimeType", "")
-            if mime_type == "text/html" and "data" in part.get("body", {}):
-                return base64.urlsafe_b64decode(part["body"]["data"]).decode()
-
-        return None
-
-    # Check if payload has parts (multipart message)
-    if "parts" in payload:
-        text = extract_text_from_parts(payload["parts"])
-        if text:
-            return text
-
-    # Fallback to body data if available (simple message)
-    if "body" in payload and "data" in payload["body"]:
-        return base64.urlsafe_b64decode(payload["body"]["data"]).decode()
-
-    return ""
