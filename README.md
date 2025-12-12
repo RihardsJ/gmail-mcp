@@ -25,10 +25,10 @@ This project is a Model Context Protocol (MCP) server that enables AI assistants
 
 - [x] **Gmail API Setup**: Google Cloud project, OAuth2 configuration, scopes
 - [x] **MCP Server**: Python implementation with mcp SDK
-- [ ] **Authorization**: OAuth2 authentication for Gmail API
-- [ ] **Email Retrieval Tool**: `get_unread_emails` with required fields
-- [ ] **Draft Reply Tool**: `create_draft_reply` with threading
-- [ ] **Claude Desktop Integration**: Local server configuration and testing
+- [x] **Authorization**: OAuth2 authentication for Gmail API
+- [x] **Email Retrieval Tool**: `get_unread_emails` with required fields
+- [x] **Draft Reply Tool**: `create_draft_reply` with threading
+- [x] **Claude Desktop Integration**: Local server configuration and testing
 - [ ] **Documentation**: Setup instructions, example prompts, screenshots
 
 ### Stretch Goals
@@ -54,39 +54,63 @@ This project is a Model Context Protocol (MCP) server that enables AI assistants
 3. Configure OAuth2 (scopes: gmail.readonly, gmail.compose)
 4. Download credentials.json
 
-### Usage with Claude Desktop (streamable-http transport layer):
+### Claude Desktop Configuration
+
+Add this to your Claude Desktop config file (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
 
 ```json
 {
   "mcpServers": {
-    "gmail-mcp-server": {
-      TODO: add instructions
+    "gmail_mcp_server": {
+      "command": "root_path_to/gmail-mcp/venv/bin/python",
+      "args": ["root_path_to/gmail-mcp/main.py"]
     }
   }
 }
 ```
 
-## Example Usage
+**Important**: Replace `/absolute/path/to/gmail-mcp` with the actual path to your project directory.
 
-### Run server in container
+After updating the config:
+1. Save the file
+2. Restart Claude Desktop
+3. On first use, you'll be prompted to authenticate with Google OAuth
 
-1. Start mcp server: `docker-compose up -d`
-2. Stop mcp server: `docker-compose down`
-3. View logs: `docker-compose logs -f`
-4. Start inspector (for debugging): `npx @modelcontextprotocol/inspector`
+## Local Development
 
-### Run local server
+### Setup
 
-1. `source venv/bin/activate`
+1. Clone the repository
 2. Install dependencies: `uv install`
-3. Start server: `uv run python main.py`
+3. Configure your Gmail API credentials (see [docs/gcp-setup.md](docs/gcp-setup.md))
+4. Run the server: `uv run gmail-mcp-server`
+
+### Testing with MCP Inspector
+
+For debugging and testing:
+
+```bash
+npx @modelcontextprotocol/inspector uv --directory /path/to/gmail-mcp run gmail-mcp-server
+```
 
 ### Sample Prompts
 
-Coming soon!
+#### Prompt 1: Read and Summarize Unread Emails
+```
+Show me my 3 most recent unread emails and provide a brief summary of each one, including who sent it and what it's about.
+```
+
+#### Prompt 2: Create Draft Reply
+```
+Check my unread emails. For the first one, draft a professional reply thanking the sender and saying I'll get back to them by end of week. Keep it friendly and concise.
+```
+
+📝 **Note**: After using Prompt 2, check your Gmail drafts folder to review the generated reply before sending.
+
+For more example prompts, see [docs/example-prompts.md](docs/example-prompts.md).
 
 ### Screenshots
 
 Coming soon!
 
-## Project status: 🚧 Planning
+## Project status: 🧑‍💻 In development
