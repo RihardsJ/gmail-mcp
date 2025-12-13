@@ -1,4 +1,4 @@
-.PHONY: help activate run inspector clean test test-coverage test-watch test-verbose clean-test
+.PHONY: help activate run inspector clean test test-coverage test-watch test-verbose clean-test install-hooks
 
 # Default target
 help:
@@ -14,6 +14,9 @@ help:
 	@echo "  make test-verbose    - Run tests with verbose output"
 	@echo "  make test-watch      - Run tests in watch mode (re-run on changes)"
 	@echo "  make clean-test      - Remove test cache and coverage files"
+	@echo ""
+	@echo "Git hooks:"
+	@echo "  make install-hooks   - Install git hooks (pre-push tests)"
 
 # Activate virtual environment
 activate:
@@ -62,3 +65,14 @@ clean-test:
 	rm -rf htmlcov
 	rm -f .coverage
 	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+
+# Git hooks
+install-hooks:
+	@echo "Installing git hooks..."
+	@mkdir -p .git/hooks
+	@cp .githooks/pre-push .git/hooks/pre-push
+	@chmod +x .git/hooks/pre-push
+	@echo "✅ Pre-push hook installed successfully!"
+	@echo ""
+	@echo "Tests will now run automatically before each push."
+	@echo "To skip the hook, use: git push --no-verify"
