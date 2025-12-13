@@ -3,10 +3,28 @@ __pycache__/
 *.py[oc]
 build/
 dist/
+*.egg-info/
 
 # Virtual environments
 .venv
+venv/
 
 # Ignore dynaconf secret files
 .secrets.*
 .git/credentials
+
+# Test and coverage files
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+coverage.xml
+*.cover
+.hypothesis/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
