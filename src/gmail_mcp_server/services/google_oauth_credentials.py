@@ -4,29 +4,23 @@ from logging import getLogger
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
 
 from ..configs import configs
 
-SCOPES = configs.get("gmail_api_scopes")
+SCOPES = configs.get("google_scopes")
 CLIENT_SECRETS_FILE = configs.get("client_secrets_file")
 TOKEN_FILE = configs.get("token_file")
 
 
 logger = getLogger(__name__)
-logger.info("Scopes: %s", SCOPES)
 
 
-def get_gmail_oauth_credentials():
+def get_google_oauth_credentials():
     """
-    Get or refresh Gmail API credentials and build the Gmail API service.
-
-    Returns:
-        Gmail API service object.
-
+    Get or refresh Google OAuth credentials.
     Reference: https://developers.google.com/workspace/gmail/api/quickstart/python
     """
-    logger.info("Getting gmail api credentials...")
+    logger.info("Getting google oauth credentials...")
     creds = None
     # First check if there are valid credentials available
     if os.path.exists(TOKEN_FILE):
@@ -51,16 +45,3 @@ def get_gmail_oauth_credentials():
         with open(TOKEN_FILE, "w") as token:
             token.write(creds.to_json())
     return creds
-
-
-def get_gmail_api_service():
-    """
-    Build the Gmail API service.
-
-    Returns:
-        Gmail API service object.
-
-    Reference: https://developers.google.com/workspace/gmail/api/quickstart/python
-    """
-    logger.info("Building gmail api service...")
-    return build("gmail", "v1", credentials=get_gmail_oauth_credentials())

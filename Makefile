@@ -35,7 +35,7 @@ settings:
 	@echo "{"
 	@echo "  \"mcpServers\": {"
 	@echo "    \"gmail_mcp_server\": {"
-	@echo "      \"command\": \"$(PWD)/venv/bin/python\","
+	@echo "      \"command\": \"$(PWD)/.venv/bin/python\","
 	@echo "      \"args\": [\"$(PWD)/main.py\"]"
 	@echo "    }"
 	@echo "  }"
