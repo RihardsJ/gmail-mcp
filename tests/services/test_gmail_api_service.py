@@ -4,18 +4,18 @@ Tests for Gmail API service module.
 
 from unittest.mock import MagicMock, Mock, mock_open, patch
 
-from gmail_mcp_server.services.gmail_api_service import (
-    get_gmail_api_service,
-    get_gmail_oauth_credentials,
+from gmail_mcp_server.services.google_oauth_credentials import (
+    get_google_oauth_credentials as get_gmail_oauth_credentials,
 )
+from gmail_mcp_server.services.google_workspace_service import get_gmail_api_service
 
 
 class TestGetGmailOAuthCredentials:
     """Tests for get_gmail_oauth_credentials function."""
 
-    @patch("gmail_mcp_server.services.gmail_api_service.os.path.exists")
+    @patch("gmail_mcp_server.services.google_oauth_credentials.os.path.exists")
     @patch(
-        "gmail_mcp_server.services.gmail_api_service.Credentials.from_authorized_user_file"
+        "gmail_mcp_server.services.google_oauth_credentials.Credentials.from_authorized_user_file"
     )
     def test_loads_existing_valid_credentials(
         self, mock_from_file, mock_exists, mock_credentials
@@ -30,9 +30,9 @@ class TestGetGmailOAuthCredentials:
         mock_from_file.assert_called_once()
         mock_exists.assert_called_once()
 
-    @patch("gmail_mcp_server.services.gmail_api_service.os.path.exists")
+    @patch("gmail_mcp_server.services.google_oauth_credentials.os.path.exists")
     @patch(
-        "gmail_mcp_server.services.gmail_api_service.Credentials.from_authorized_user_file"
+        "gmail_mcp_server.services.google_oauth_credentials.Credentials.from_authorized_user_file"
     )
     @patch("builtins.open", new_callable=mock_open)
     def test_refreshes_expired_credentials(
@@ -56,9 +56,9 @@ class TestGetGmailOAuthCredentials:
             assert result == expired_creds
             mock_file.assert_called()
 
-    @patch("gmail_mcp_server.services.gmail_api_service.os.path.exists")
+    @patch("gmail_mcp_server.services.google_oauth_credentials.os.path.exists")
     @patch(
-        "gmail_mcp_server.services.gmail_api_service.InstalledAppFlow.from_client_secrets_file"
+        "gmail_mcp_server.services.google_oauth_credentials.InstalledAppFlow.from_client_secrets_file"
     )
     @patch("builtins.open", new_callable=mock_open)
     def test_creates_new_credentials_when_none_exist(
@@ -77,12 +77,12 @@ class TestGetGmailOAuthCredentials:
         mock_flow.run_local_server.assert_called_once()
         mock_file.assert_called()
 
-    @patch("gmail_mcp_server.services.gmail_api_service.os.path.exists")
+    @patch("gmail_mcp_server.services.google_oauth_credentials.os.path.exists")
     @patch(
-        "gmail_mcp_server.services.gmail_api_service.Credentials.from_authorized_user_file"
+        "gmail_mcp_server.services.google_oauth_credentials.Credentials.from_authorized_user_file"
     )
     @patch(
-        "gmail_mcp_server.services.gmail_api_service.InstalledAppFlow.from_client_secrets_file"
+        "gmail_mcp_server.services.google_oauth_credentials.InstalledAppFlow.from_client_secrets_file"
     )
     @patch("builtins.open", new_callable=mock_open)
     def test_creates_new_credentials_when_invalid_and_no_refresh_token(
@@ -110,9 +110,9 @@ class TestGetGmailOAuthCredentials:
             success_message="Successfully authorized! You can now close this window.",
         )
 
-    @patch("gmail_mcp_server.services.gmail_api_service.os.path.exists")
+    @patch("gmail_mcp_server.services.google_oauth_credentials.os.path.exists")
     @patch(
-        "gmail_mcp_server.services.gmail_api_service.Credentials.from_authorized_user_file"
+        "gmail_mcp_server.services.google_oauth_credentials.Credentials.from_authorized_user_file"
     )
     @patch("builtins.open", new_callable=mock_open)
     def test_saves_credentials_after_refresh(
@@ -137,9 +137,9 @@ class TestGetGmailOAuthCredentials:
             handle = mock_file()
             handle.write.assert_called_with('{"token": "refreshed_token"}')
 
-    @patch("gmail_mcp_server.services.gmail_api_service.os.path.exists")
+    @patch("gmail_mcp_server.services.google_oauth_credentials.os.path.exists")
     @patch(
-        "gmail_mcp_server.services.gmail_api_service.InstalledAppFlow.from_client_secrets_file"
+        "gmail_mcp_server.services.google_oauth_credentials.InstalledAppFlow.from_client_secrets_file"
     )
     @patch("builtins.open", new_callable=mock_open)
     def test_saves_credentials_after_oauth_flow(
@@ -163,8 +163,10 @@ class TestGetGmailOAuthCredentials:
 class TestGetGmailApiService:
     """Tests for get_gmail_api_service function."""
 
-    @patch("gmail_mcp_server.services.gmail_api_service.build")
-    @patch("gmail_mcp_server.services.gmail_api_service.get_gmail_oauth_credentials")
+    @patch("gmail_mcp_server.services.google_workspace_service.build")
+    @patch(
+        "gmail_mcp_server.services.google_workspace_service.get_google_oauth_credentials"
+    )
     def test_builds_gmail_service(self, mock_get_creds, mock_build, mock_credentials):
         """Test building Gmail API service."""
         mock_get_creds.return_value = mock_credentials
@@ -177,8 +179,10 @@ class TestGetGmailApiService:
         mock_build.assert_called_once_with("gmail", "v1", credentials=mock_credentials)
         assert result == mock_service
 
-    @patch("gmail_mcp_server.services.gmail_api_service.build")
-    @patch("gmail_mcp_server.services.gmail_api_service.get_gmail_oauth_credentials")
+    @patch("gmail_mcp_server.services.google_workspace_service.build")
+    @patch(
+        "gmail_mcp_server.services.google_workspace_service.get_google_oauth_credentials"
+    )
     def test_uses_correct_api_version(
         self, mock_get_creds, mock_build, mock_credentials
     ):
@@ -191,8 +195,10 @@ class TestGetGmailApiService:
         assert args[0] == "gmail"
         assert args[1] == "v1"
 
-    @patch("gmail_mcp_server.services.gmail_api_service.build")
-    @patch("gmail_mcp_server.services.gmail_api_service.get_gmail_oauth_credentials")
+    @patch("gmail_mcp_server.services.google_workspace_service.build")
+    @patch(
+        "gmail_mcp_server.services.google_workspace_service.get_google_oauth_credentials"
+    )
     def test_passes_credentials_to_build(
         self, mock_get_creds, mock_build, mock_credentials
     ):
