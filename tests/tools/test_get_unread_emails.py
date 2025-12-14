@@ -3,7 +3,7 @@ Tests for get_unread_emails tool.
 """
 
 import base64
-from unittest.mock import AsyncMock, MagicMock, Mock, patch
+from unittest.mock import Mock, patch
 
 import pytest
 from googleapiclient.errors import HttpError

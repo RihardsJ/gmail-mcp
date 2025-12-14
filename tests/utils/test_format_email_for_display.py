@@ -4,8 +4,6 @@ Tests for format_email_for_display utility.
 
 import base64
 
-import pytest
-
 from gmail_mcp_server.utils.format_email_for_display import format_email_for_display
 
 

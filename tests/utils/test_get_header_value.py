@@ -2,8 +2,6 @@
 Tests for get_header_value utility.
 """
 
-import pytest
-
 from gmail_mcp_server.utils.get_header_value import get_header_value
 
 

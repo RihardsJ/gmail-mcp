@@ -3,8 +3,7 @@ Tests for create_draft_reply tool.
 """
 
 import base64
-from email.mime.text import MIMEText
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import Mock, patch
 
 import pytest
 from googleapiclient.errors import HttpError

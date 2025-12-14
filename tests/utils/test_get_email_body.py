@@ -4,8 +4,6 @@ Tests for get_email_body utility.
 
 import base64
 
-import pytest
-
 from gmail_mcp_server.utils.get_email_body import get_email_body
 
 

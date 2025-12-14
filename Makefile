@@ -51,7 +51,10 @@ test-verbose:
 	uv run pytest -v
 
 test-watch:
-	uv run pytest-watch
+	@echo "Running tests in watch mode (auto-reruns on file changes)..."
+	@echo "Press Ctrl+C to stop"
+	@echo ""
+	uv run ptw -- --tb=short
 
 # Cleanup
 clean:

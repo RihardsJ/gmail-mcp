@@ -2,8 +2,6 @@
 Tests for ensure_reply_subject utility.
 """
 
-import pytest
-
 from gmail_mcp_server.utils.ensure_reply_subject import ensure_reply_subject
 
 

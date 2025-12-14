@@ -2,12 +2,7 @@
 Tests for Gmail API service module.
 """
 
-import os
 from unittest.mock import MagicMock, Mock, mock_open, patch
-
-import pytest
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
 
 from gmail_mcp_server.services.gmail_api_service import (
     get_gmail_api_service,

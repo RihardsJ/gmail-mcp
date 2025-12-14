@@ -2,8 +2,6 @@
 Tests for build_threading_headers utility.
 """
 
-import pytest
-
 from gmail_mcp_server.utils.build_threading_headers import build_threading_headers
 
 

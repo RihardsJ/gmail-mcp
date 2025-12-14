@@ -2,7 +2,7 @@
 Tests for MCP server module.
 """
 
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -15,7 +15,7 @@ class TestHandleListTools:
     @pytest.mark.asyncio
     async def test_lists_all_available_tools(self):
         """Test that all tools are listed."""
-        tools = await handle_list_tools()
+        tools = await handle_list_tools()  # type: ignore[call-arg]
 
         assert len(tools) == 2
 
@@ -26,7 +26,7 @@ class TestHandleListTools:
     @pytest.mark.asyncio
     async def test_get_unread_emails_tool_schema(self):
         """Test get_unread_emails tool schema."""
-        tools = await handle_list_tools()
+        tools = await handle_list_tools()  # type: ignore[call-arg]
         get_unread_tool = next(t for t in tools if t.name == "get_unread_emails")
 
         assert get_unread_tool.description == "Get unread emails"
@@ -37,7 +37,7 @@ class TestHandleListTools:
     @pytest.mark.asyncio
     async def test_create_draft_email_tool_schema(self):
         """Test create_draft_email tool schema."""
-        tools = await handle_list_tools()
+        tools = await handle_list_tools()  # type: ignore[call-arg]
         create_draft_tool = next(t for t in tools if t.name == "create_draft_email")
 
         assert create_draft_tool.description == "Create a draft email"
@@ -50,7 +50,7 @@ class TestHandleListTools:
     @pytest.mark.asyncio
     async def test_tool_schemas_have_descriptions(self):
         """Test that all tool parameters have descriptions."""
-        tools = await handle_list_tools()
+        tools = await handle_list_tools()  # type: ignore[call-arg]
 
         for tool in tools:
             properties = tool.inputSchema.get("properties", {})
