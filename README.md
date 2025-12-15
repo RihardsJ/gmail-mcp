@@ -312,9 +312,35 @@ I need to apologize for the delayed report and explain it's now complete.
 
 For more example prompts, see [docs/example-prompts.md](docs/example-prompts.md)
 
+### Demo Video
+
+Watch the Gmail MCP Server in action:
+
+https://github.com/user-attachments/assets/demo_mcp.mov
+
+The demo shows:
+-  Getting unread emails from Gmail
+-  Creating draft replies with threading
+
 ### Screenshots
 
-Coming soon!
+#### MCP Server Connected in Claude Desktop
+![MCP Server Connection](./screenshots/Screenshot%202025-12-15%20at%2014.33.55.png)
+
+#### Fetching Unread Emails
+![Getting Unread Emails](./screenshots/Screenshot%202025-12-15%20at%2014.35.10.png)
+
+#### Drafting Professional Reply with 7 Cs Framework
+![Draft Professional Reply](./screenshots/Screenshot%202025-12-15%20at%2015.05.32.png)
+
+#### Using Personal Email Templates
+![Email Templates](./screenshots/Screenshot%202025-12-15%20at%2015.06.38.png)
+
+#### MCP Prompts in Action
+![MCP Prompts](./screenshots/Screenshot%202025-12-15%20at%2015.19.27.png)
+
+#### Draft Reply Created in Gmail
+![Gmail Draft](./screenshots/Screenshot%202025-12-15%20at%2015.19.31.png)
 
 ## MCP Prompts
 
