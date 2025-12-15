@@ -19,10 +19,12 @@ This project is a Model Context Protocol (MCP) server that enables AI assistants
 ## MCP Capabilities
 
 ### Tools
+
 - **`get_unread_emails`**: Returns sender, subject, body/snippet, and email/thread ID
 - **`create_draft_reply`**: Creates correctly threaded draft replies from original email/thread ID and reply body
 
 ### Resources
+
 - **`file:///email-guidelines/7cs-communication.md`**: The 7 Cs of Effective Communication framework
 - **`file:///email-guidelines/personal-templates.md`**: 11 personal email templates for common tasks
 - **`file:///email-guidelines/ai-drafting-directive.md`**: Comprehensive AI email drafting directive with persona and persuasion tactics
@@ -80,6 +82,7 @@ Add this to your Claude Desktop config file (`~/Library/Application Support/Clau
 **Important**: Replace `/absolute/path/to/gmail-mcp` with the actual path to your project directory.
 
 After updating the config:
+
 1. Save the file
 2. Restart Claude Desktop
 3. On first use, you'll be prompted to authenticate with Google OAuth
@@ -131,6 +134,7 @@ Draft a reply following the 7 Cs guidelines and use one of my personal templates
 By default, resources are read from local markdown files in the `docs/` directory. You can optionally configure the server to fetch these from Google Docs instead.
 
 **Why use Google Docs?**
+
 - Centralized, shareable guidelines
 - Update without modifying code
 - Collaborate with team members
@@ -150,9 +154,10 @@ By default, resources are read from local markdown files in the `docs/` director
 4. Add Google Docs scope to settings.toml:
    ```toml
    google_scopes = [
+       "https://www.googleapis.com/auth/calendar.events.freebusy",
+       "https://www.googleapis.com/auth/drive.readonly",
        "https://www.googleapis.com/auth/gmail.readonly",
-       "https://www.googleapis.com/auth/gmail.compose",
-       "https://www.googleapis.com/auth/documents.readonly"
+       "https://www.googleapis.com/auth/gmail.compose"
    ]
    ```
 5. Delete `credentials/token.json` and restart server to re-authenticate
@@ -179,23 +184,27 @@ npx @modelcontextprotocol/inspector uv --directory /path/to/gmail-mcp run gmail-
 ### Sample Prompts
 
 #### Prompt 1: Read and Summarize Unread Emails
+
 ```
 Show me my 3 most recent unread emails and provide a brief summary of each one, including who sent it and what it's about.
 ```
 
 #### Prompt 2: Draft Reply with Guidelines
+
 ```
-Check my unread emails. For the first one from Sarah, draft a professional reply using the 7 Cs guidelines. 
+Check my unread emails. For the first one from Sarah, draft a professional reply using the 7 Cs guidelines.
 I need to schedule a follow-up meeting to discuss Q4 budget and timeline.
 ```
 
 #### Prompt 3: Use Personal Email Template
+
 ```
-I got an appointment reminder from my dentist for next Tuesday at 3pm. 
+I got an appointment reminder from my dentist for next Tuesday at 3pm.
 Draft a confirmation reply using one of my personal email templates.
 ```
 
 #### Prompt 4: Draft Reply Following All Guidelines
+
 ```
 Draft a reply to John's email using my AI drafting directive and the 7 Cs framework.
 I need to apologize for the delayed report and explain it's now complete.

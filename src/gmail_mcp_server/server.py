@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 
+import re
+
 import mcp.types as types
 from mcp.server import Server
 from pydantic import AnyUrl, FileUrl
 
 from .configs import configs
-from .resources import get_email_guidelines
+from .resources import get_calendar_availability, get_email_guidelines
 from .tools import create_draft_reply, get_unread_emails
+from .utils import format_to_rfc3339
 
 mcp_server = Server(configs["server_name"])
 
@@ -86,9 +89,34 @@ async def handle_list_resources() -> list[types.Resource]:
     ]
 
 
+@mcp_server.list_resource_templates()
+async def list_resource_templates() -> list[types.ResourceTemplate]:
+    return [
+        types.ResourceTemplate(
+            uriTemplate="calendar:///availability/{startDateTime}/{endDateTime}",
+            name="Calendar Availability",
+            description="Availability information for a specific time range.",
+            mimeType="application/json",
+        ),
+    ]
+
+
 @mcp_server.read_resource()
-async def handle_read_resource(uri: AnyUrl) -> bytes:
+async def handle_read_resource(
+    uri: AnyUrl,
+):
     uri_str = str(uri)
+
+    # Resource templates cannot be matched closely, so check them first using regex
+    calendar_pattern = r"calendar:///availability/([^/]+)/([^/]+)"
+    calendar_match = re.match(calendar_pattern, uri_str)
+    if calendar_match:
+        return await get_calendar_availability(
+            format_to_rfc3339(calendar_match.group(1)),
+            format_to_rfc3339(calendar_match.group(2)),
+        )
+
+    # Check static resource urls using close comparison
     match uri_str:
         case "file:///7cs-communication.md":
             return await get_email_guidelines("7cs")

@@ -5,7 +5,6 @@
 import logging
 from typing import Literal
 
-import mcp.types as types
 from googleapiclient.errors import HttpError
 
 from ..configs import configs
