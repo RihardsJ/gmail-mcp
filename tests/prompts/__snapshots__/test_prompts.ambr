@@ -1,0 +1,468 @@
+# serializer version: 1
+# name: TestDraftProfessionalReplyPrompt.test_draft_professional_reply_friendly_tone
+  '''
+  You are tasked with drafting a professional email reply following these strict guidelines:
+  
+  **CHAIN OF THOUGHT PROCESS:**
+  
+  1. **Retrieve Context**: First, use the get_unread_emails tool to retrieve the original email for thread_id: friendly_thread_789
+  
+  2. **Analyze the Email**:
+  - Identify the sender's tone and relationship level
+  - Extract key requests, questions, or action items
+  - Determine appropriate response category (personal/internal/external/formal)
+  
+  3. **Access Resources**:
+  - Read the AI Drafting Directive resource (file:///ai-drafting-directive.md) to understand your voice and persona
+  - Read the 7 Cs framework resource (file:///7cs-communication.md) for quality standards
+  - Consider if any personal templates (file:///personal-templates.md) are relevant
+  
+  4. **Draft the Reply**:
+  - Use first-person voice (I/we)
+  - Tone: friendly
+  - Include these key points: Address all points from the original email
+  - Apply your persona from the AI directive
+  - Ensure one clear Call-to-Action (CTA)
+  
+  5. **Apply 7 Cs Checklist**:
+  - Clear: Purpose is immediately understood
+  - Concise: No unnecessary words
+  - Concrete: Specific facts, dates, times
+  - Correct: UK English spelling and grammar
+  - Coherent: Logical flow
+  - Complete: All necessary information included
+  - Courteous: Professional and respectful
+  
+  6. **Final Review**:
+  - Verify signature: "Rihards J\nrihards.jukna@gmail.com"
+  - Check UK date/time formats if applicable
+  - Ensure tone matches the desired level: friendly
+  
+  7. **Create Draft**: Use the create_draft_email tool with thread_id and your composed reply_body
+  
+  **IMPORTANT**: Think through each step before acting. Explain your reasoning for tone and structure choices.
+  '''
+# ---
+# name: TestDraftProfessionalReplyPrompt.test_draft_professional_reply_minimal_args
+  '''
+  You are tasked with drafting a professional email reply following these strict guidelines:
+  
+  **CHAIN OF THOUGHT PROCESS:**
+  
+  1. **Retrieve Context**: First, use the get_unread_emails tool to retrieve the original email for thread_id: minimal_thread_456
+  
+  2. **Analyze the Email**:
+  - Identify the sender's tone and relationship level
+  - Extract key requests, questions, or action items
+  - Determine appropriate response category (personal/internal/external/formal)
+  
+  3. **Access Resources**:
+  - Read the AI Drafting Directive resource (file:///ai-drafting-directive.md) to understand your voice and persona
+  - Read the 7 Cs framework resource (file:///7cs-communication.md) for quality standards
+  - Consider if any personal templates (file:///personal-templates.md) are relevant
+  
+  4. **Draft the Reply**:
+  - Use first-person voice (I/we)
+  - Tone: professional
+  - Include these key points: Address all points from the original email
+  - Apply your persona from the AI directive
+  - Ensure one clear Call-to-Action (CTA)
+  
+  5. **Apply 7 Cs Checklist**:
+  - Clear: Purpose is immediately understood
+  - Concise: No unnecessary words
+  - Concrete: Specific facts, dates, times
+  - Correct: UK English spelling and grammar
+  - Coherent: Logical flow
+  - Complete: All necessary information included
+  - Courteous: Professional and respectful
+  
+  6. **Final Review**:
+  - Verify signature: "Rihards J\nrihards.jukna@gmail.com"
+  - Check UK date/time formats if applicable
+  - Ensure tone matches the desired level: professional
+  
+  7. **Create Draft**: Use the create_draft_email tool with thread_id and your composed reply_body
+  
+  **IMPORTANT**: Think through each step before acting. Explain your reasoning for tone and structure choices.
+  '''
+# ---
+# name: TestDraftProfessionalReplyPrompt.test_draft_professional_reply_references_resources
+  '''
+  You are tasked with drafting a professional email reply following these strict guidelines:
+  
+  **CHAIN OF THOUGHT PROCESS:**
+  
+  1. **Retrieve Context**: First, use the get_unread_emails tool to retrieve the original email for thread_id: test_thread
+  
+  2. **Analyze the Email**:
+  - Identify the sender's tone and relationship level
+  - Extract key requests, questions, or action items
+  - Determine appropriate response category (personal/internal/external/formal)
+  
+  3. **Access Resources**:
+  - Read the AI Drafting Directive resource (file:///ai-drafting-directive.md) to understand your voice and persona
+  - Read the 7 Cs framework resource (file:///7cs-communication.md) for quality standards
+  - Consider if any personal templates (file:///personal-templates.md) are relevant
+  
+  4. **Draft the Reply**:
+  - Use first-person voice (I/we)
+  - Tone: professional
+  - Include these key points: Address all points from the original email
+  - Apply your persona from the AI directive
+  - Ensure one clear Call-to-Action (CTA)
+  
+  5. **Apply 7 Cs Checklist**:
+  - Clear: Purpose is immediately understood
+  - Concise: No unnecessary words
+  - Concrete: Specific facts, dates, times
+  - Correct: UK English spelling and grammar
+  - Coherent: Logical flow
+  - Complete: All necessary information included
+  - Courteous: Professional and respectful
+  
+  6. **Final Review**:
+  - Verify signature: "Rihards J\nrihards.jukna@gmail.com"
+  - Check UK date/time formats if applicable
+  - Ensure tone matches the desired level: professional
+  
+  7. **Create Draft**: Use the create_draft_email tool with thread_id and your composed reply_body
+  
+  **IMPORTANT**: Think through each step before acting. Explain your reasoning for tone and structure choices.
+  '''
+# ---
+# name: TestDraftProfessionalReplyPrompt.test_draft_professional_reply_with_all_args
+  '''
+  You are tasked with drafting a professional email reply following these strict guidelines:
+  
+  **CHAIN OF THOUGHT PROCESS:**
+  
+  1. **Retrieve Context**: First, use the get_unread_emails tool to retrieve the original email for thread_id: test_thread_123
+  
+  2. **Analyze the Email**:
+  - Identify the sender's tone and relationship level
+  - Extract key requests, questions, or action items
+  - Determine appropriate response category (personal/internal/external/formal)
+  
+  3. **Access Resources**:
+  - Read the AI Drafting Directive resource (file:///ai-drafting-directive.md) to understand your voice and persona
+  - Read the 7 Cs framework resource (file:///7cs-communication.md) for quality standards
+  - Consider if any personal templates (file:///personal-templates.md) are relevant
+  
+  4. **Draft the Reply**:
+  - Use first-person voice (I/we)
+  - Tone: formal
+  - Include these key points: Schedule follow-up meeting, discuss budget
+  - Apply your persona from the AI directive
+  - Ensure one clear Call-to-Action (CTA)
+  
+  5. **Apply 7 Cs Checklist**:
+  - Clear: Purpose is immediately understood
+  - Concise: No unnecessary words
+  - Concrete: Specific facts, dates, times
+  - Correct: UK English spelling and grammar
+  - Coherent: Logical flow
+  - Complete: All necessary information included
+  - Courteous: Professional and respectful
+  
+  6. **Final Review**:
+  - Verify signature: "Rihards J\nrihards.jukna@gmail.com"
+  - Check UK date/time formats if applicable
+  - Ensure tone matches the desired level: formal
+  
+  7. **Create Draft**: Use the create_draft_email tool with thread_id and your composed reply_body
+  
+  **IMPORTANT**: Think through each step before acting. Explain your reasoning for tone and structure choices.
+  '''
+# ---
+# name: TestScheduleMeetingReplyPrompt.test_schedule_meeting_reply_minimal_args
+  '''
+  You are tasked with drafting a meeting acceptance or proposal reply with calendar context:
+  
+  **CONTEXTUAL REASONING PROCESS:**
+  
+  1. **Retrieve Original Email**: Use get_unread_emails to fetch thread_id: meeting_456
+     - Identify: Who is requesting the meeting?
+     - Extract: What is the meeting about?
+     - Check: Are specific times already proposed?
+  
+  2. **Check Calendar Availability**:
+     - Access calendar resource: calendar:///availability/2025-12-18/2025-12-22
+     - Identify free slots in your calendar
+     - Note: You must propose exactly 2 time slot options (per AI directive scheduling protocol)
+  
+  3. **Access Guidelines**:
+     - Read AI Drafting Directive (file:///ai-drafting-directive.md)
+     - Review 7 Cs framework (file:///7cs-communication.md)
+     - Note: Section 3.0 rule #3 - "When proposing a meeting, always offer two distinct options (date and time)"
+  
+  4. **Compose Meeting Reply**:
+     - If they proposed times and you're available: Accept enthusiastically
+     - If you need to propose times: Offer exactly 2 specific options based on calendar availability
+     - Suggest 2 alternative times from your available slots
+     - Use UK date format: "14 December 2025"
+     - Include timezone: BST or GMT as appropriate
+     - Ask for agenda if not provided
+  
+  5. **Apply Professional Tone**:
+     - Warmly professional and enthusiastic about the meeting
+     - Direct and efficient
+     - Include clear CTA: "Please confirm which time works best for you"
+  
+  6. **Create Draft**: Use create_draft_email tool with thread_id and reply_body
+  
+  **FORMAT REQUIREMENTS:**
+  - Date format: DD Month YYYY (e.g., "14 December 2025")
+  - Time format: HH:MM AM/PM GMT/BST
+  - Always provide 2 time options when proposing
+  '''
+# ---
+# name: TestScheduleMeetingReplyPrompt.test_schedule_meeting_reply_references_resources
+  '''
+  You are tasked with drafting a meeting acceptance or proposal reply with calendar context:
+  
+  **CONTEXTUAL REASONING PROCESS:**
+  
+  1. **Retrieve Original Email**: Use get_unread_emails to fetch thread_id: test_meeting
+     - Identify: Who is requesting the meeting?
+     - Extract: What is the meeting about?
+     - Check: Are specific times already proposed?
+  
+  2. **Check Calendar Availability**:
+     - Access calendar resource: calendar:///availability/2025-12-16/2025-12-20
+     - Identify free slots in your calendar
+     - Note: You must propose exactly 2 time slot options (per AI directive scheduling protocol)
+  
+  3. **Access Guidelines**:
+     - Read AI Drafting Directive (file:///ai-drafting-directive.md)
+     - Review 7 Cs framework (file:///7cs-communication.md)
+     - Note: Section 3.0 rule #3 - "When proposing a meeting, always offer two distinct options (date and time)"
+  
+  4. **Compose Meeting Reply**:
+     - If they proposed times and you're available: Accept enthusiastically
+     - If you need to propose times: Offer exactly 2 specific options based on calendar availability
+     - Suggest 2 alternative times from your available slots
+     - Use UK date format: "14 December 2025"
+     - Include timezone: BST or GMT as appropriate
+     - Ask for agenda if not provided
+  
+  5. **Apply Professional Tone**:
+     - Warmly professional and enthusiastic about the meeting
+     - Direct and efficient
+     - Include clear CTA: "Please confirm which time works best for you"
+  
+  6. **Create Draft**: Use create_draft_email tool with thread_id and reply_body
+  
+  **FORMAT REQUIREMENTS:**
+  - Date format: DD Month YYYY (e.g., "14 December 2025")
+  - Time format: HH:MM AM/PM GMT/BST
+  - Always provide 2 time options when proposing
+  '''
+# ---
+# name: TestScheduleMeetingReplyPrompt.test_schedule_meeting_reply_with_all_args
+  '''
+  You are tasked with drafting a meeting acceptance or proposal reply with calendar context:
+  
+  **CONTEXTUAL REASONING PROCESS:**
+  
+  1. **Retrieve Original Email**: Use get_unread_emails to fetch thread_id: meeting_thread_123
+     - Identify: Who is requesting the meeting?
+     - Extract: What is the meeting about?
+     - Check: Are specific times already proposed?
+  
+  2. **Check Calendar Availability**:
+     - Access calendar resource: calendar:///availability/2025-12-16/2025-12-20
+     - Identify free slots in your calendar
+     - Note: You must propose exactly 2 time slot options (per AI directive scheduling protocol)
+  
+  3. **Access Guidelines**:
+     - Read AI Drafting Directive (file:///ai-drafting-directive.md)
+     - Review 7 Cs framework (file:///7cs-communication.md)
+     - Note: Section 3.0 rule #3 - "When proposing a meeting, always offer two distinct options (date and time)"
+  
+  4. **Compose Meeting Reply**:
+     - If they proposed times and you're available: Accept enthusiastically
+     - If you need to propose times: Offer exactly 2 specific options based on calendar availability
+     - Consider these proposed times: Tuesday 2pm or Wednesday 3pm
+     - Use UK date format: "14 December 2025"
+     - Include timezone: BST or GMT as appropriate
+     - Ask for agenda if not provided
+  
+  5. **Apply Professional Tone**:
+     - Warmly professional and enthusiastic about the meeting
+     - Direct and efficient
+     - Include clear CTA: "Please confirm which time works best for you"
+  
+  6. **Create Draft**: Use create_draft_email tool with thread_id and reply_body
+  
+  **FORMAT REQUIREMENTS:**
+  - Date format: DD Month YYYY (e.g., "14 December 2025")
+  - Time format: HH:MM AM/PM GMT/BST
+  - Always provide 2 time options when proposing
+  '''
+# ---
+# name: TestSuggestTemplatePrompt.test_suggest_template_output_format
+  '''
+  You are tasked with analyzing an email and suggesting the best matching template using few-shot learning:
+  
+  **FEW-SHOT TEMPLATE MATCHING PROCESS:**
+  
+  1. **Retrieve the Email**: Use get_unread_emails to fetch thread_id: format_test
+  
+  2. **Access Template Library**: Read resource file:///personal-templates.md
+     - Available templates (11 total):
+       1. Responding to an Appointment Reminder
+       2. Responding to a Quote for Home Maintenance
+       3. Responding to a "Happy Birthday" Message
+       4. Responding to a Neighbor's Email
+       5. Responding to a School or Teacher's Email
+       6. Responding to an Inquiry about an Item You're Selling Online
+       7. Responding to a Bill or Invoice Question
+       8. Responding to a Follow-Up from a Service Provider
+       9. Responding to a "Checking In" Email from a Friend
+       10. Responding to a Request for a Personal Reference
+       11. Responding to an Online Order Confirmation
+  
+  3. **Pattern Matching Analysis**:
+     - Identify email type/category
+     - Match sender type (friend/business/service provider/etc.)
+     - Match intent (confirmation/question/social/transaction)
+     - Match context indicators (keywords like "appointment", "quote", "birthday", "meeting", etc.)
+  
+  4. **Reasoning Process** (Few-Shot Learning):
+     - Compare email characteristics with each template's use case
+     - Score relevance of each template (0-10)
+     - Identify top 2-3 potential matches
+     - Select best match with confidence score
+  
+  5. **Present Recommendation**:
+     - Template name and number
+     - Confidence score (0-100%)
+     - Reasoning for selection
+     - Key fields to customize [Name, Date, Amount, etc.]
+     - Optional: Show populated template preview
+  
+  6. **Alternative Suggestions**:
+     - If no template matches well (confidence < 60%): Recommend custom draft
+     - If multiple templates match: Suggest the top 2 with trade-offs
+  
+  **OUTPUT FORMAT:**
+  ```
+  **RECOMMENDED TEMPLATE:** [Template Name]
+  **CONFIDENCE:** [X]%
+  **REASONING:** [Why this template matches]
+  **CUSTOMIZATION NEEDED:** [List of fields to fill in]
+  **PREVIEW:** [Show template with placeholders filled]
+  ```
+  '''
+# ---
+# name: TestSuggestTemplatePrompt.test_suggest_template_references_templates
+  '''
+  You are tasked with analyzing an email and suggesting the best matching template using few-shot learning:
+  
+  **FEW-SHOT TEMPLATE MATCHING PROCESS:**
+  
+  1. **Retrieve the Email**: Use get_unread_emails to fetch thread_id: test_thread
+  
+  2. **Access Template Library**: Read resource file:///personal-templates.md
+     - Available templates (11 total):
+       1. Responding to an Appointment Reminder
+       2. Responding to a Quote for Home Maintenance
+       3. Responding to a "Happy Birthday" Message
+       4. Responding to a Neighbor's Email
+       5. Responding to a School or Teacher's Email
+       6. Responding to an Inquiry about an Item You're Selling Online
+       7. Responding to a Bill or Invoice Question
+       8. Responding to a Follow-Up from a Service Provider
+       9. Responding to a "Checking In" Email from a Friend
+       10. Responding to a Request for a Personal Reference
+       11. Responding to an Online Order Confirmation
+  
+  3. **Pattern Matching Analysis**:
+     - Identify email type/category
+     - Match sender type (friend/business/service provider/etc.)
+     - Match intent (confirmation/question/social/transaction)
+     - Match context indicators (keywords like "appointment", "quote", "birthday", "meeting", etc.)
+  
+  4. **Reasoning Process** (Few-Shot Learning):
+     - Compare email characteristics with each template's use case
+     - Score relevance of each template (0-10)
+     - Identify top 2-3 potential matches
+     - Select best match with confidence score
+  
+  5. **Present Recommendation**:
+     - Template name and number
+     - Confidence score (0-100%)
+     - Reasoning for selection
+     - Key fields to customize [Name, Date, Amount, etc.]
+     - Optional: Show populated template preview
+  
+  6. **Alternative Suggestions**:
+     - If no template matches well (confidence < 60%): Recommend custom draft
+     - If multiple templates match: Suggest the top 2 with trade-offs
+  
+  **OUTPUT FORMAT:**
+  ```
+  **RECOMMENDED TEMPLATE:** [Template Name]
+  **CONFIDENCE:** [X]%
+  **REASONING:** [Why this template matches]
+  **CUSTOMIZATION NEEDED:** [List of fields to fill in]
+  **PREVIEW:** [Show template with placeholders filled]
+  ```
+  '''
+# ---
+# name: TestSuggestTemplatePrompt.test_suggest_template_with_thread_id
+  '''
+  You are tasked with analyzing an email and suggesting the best matching template using few-shot learning:
+  
+  **FEW-SHOT TEMPLATE MATCHING PROCESS:**
+  
+  1. **Retrieve the Email**: Use get_unread_emails to fetch thread_id: template_thread_123
+  
+  2. **Access Template Library**: Read resource file:///personal-templates.md
+     - Available templates (11 total):
+       1. Responding to an Appointment Reminder
+       2. Responding to a Quote for Home Maintenance
+       3. Responding to a "Happy Birthday" Message
+       4. Responding to a Neighbor's Email
+       5. Responding to a School or Teacher's Email
+       6. Responding to an Inquiry about an Item You're Selling Online
+       7. Responding to a Bill or Invoice Question
+       8. Responding to a Follow-Up from a Service Provider
+       9. Responding to a "Checking In" Email from a Friend
+       10. Responding to a Request for a Personal Reference
+       11. Responding to an Online Order Confirmation
+  
+  3. **Pattern Matching Analysis**:
+     - Identify email type/category
+     - Match sender type (friend/business/service provider/etc.)
+     - Match intent (confirmation/question/social/transaction)
+     - Match context indicators (keywords like "appointment", "quote", "birthday", "meeting", etc.)
+  
+  4. **Reasoning Process** (Few-Shot Learning):
+     - Compare email characteristics with each template's use case
+     - Score relevance of each template (0-10)
+     - Identify top 2-3 potential matches
+     - Select best match with confidence score
+  
+  5. **Present Recommendation**:
+     - Template name and number
+     - Confidence score (0-100%)
+     - Reasoning for selection
+     - Key fields to customize [Name, Date, Amount, etc.]
+     - Optional: Show populated template preview
+  
+  6. **Alternative Suggestions**:
+     - If no template matches well (confidence < 60%): Recommend custom draft
+     - If multiple templates match: Suggest the top 2 with trade-offs
+  
+  **OUTPUT FORMAT:**
+  ```
+  **RECOMMENDED TEMPLATE:** [Template Name]
+  **CONFIDENCE:** [X]%
+  **REASONING:** [Why this template matches]
+  **CUSTOMIZATION NEEDED:** [List of fields to fill in]
+  **PREVIEW:** [Show template with placeholders filled]
+  ```
+  '''
+# ---
