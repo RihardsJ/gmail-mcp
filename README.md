@@ -29,6 +29,52 @@ This project is a Model Context Protocol (MCP) server that enables AI assistants
 - **`file:///email-guidelines/personal-templates.md`**: 11 personal email templates for common tasks
 - **`file:///email-guidelines/ai-drafting-directive.md`**: Comprehensive AI email drafting directive with persona and persuasion tactics
 
+## Stretch Goals 
+
+### 1. Professional Writing Framework via MCP Resources
+
+Exposed three comprehensive resources that Claude can access when drafting emails:
+
+- **7 Cs of Communication** (`file:///email-guidelines/7cs-communication.md`)
+  - Professional framework ensuring emails are: Clear, Concise, Correct, Coherent, Complete, Courteous, and Concrete
+  - Automatically applied when using the `draft_professional_reply` prompt
+
+- **Personal Email Templates** (`file:///email-guidelines/personal-templates.md`)
+  - 11 ready-to-use templates for common scenarios (appointments, quotes, neighbor communications, etc.)
+  - Accessible via the `suggest_template` prompt with AI-powered matching
+
+- **AI Drafting Directive** (`file:///email-guidelines/ai-drafting-directive.md`)
+  - Incorporates principles from Dale Carnegie, Robert Cialdini, and Stephen Covey
+  - Defines persona, tone mapping, and ethical persuasion tactics
+  - Ensures consistent voice across all communications
+
+### 2. Advanced MCP Prompts with Prompt Engineering
+
+Implemented three sophisticated prompts demonstrating different prompt engineering techniques:
+
+| Prompt | Technique | Purpose |
+|--------|-----------|---------|
+| `draft_professional_reply` | Chain of Thought | 7-step reasoning process for professional emails |
+| `schedule_meeting_reply` | Contextual Prompting | Calendar-integrated meeting scheduling |
+| `suggest_template` | Few-Shot Learning | AI-powered template matching with confidence scoring |
+
+### 3. Google Docs Integration (Optional)
+
+- Fetch email guidelines directly from Google Docs for centralized, team-shareable documentation
+- Automatic fallback to local markdown files if Google Docs unavailable
+- Supports collaborative guideline updates without code changes
+- Configurable via `settings.toml` with document IDs
+
+### 4. Google Calendar Integration (Optional)
+
+- Real-time availability checking via Google Calendar API
+- The `schedule_meeting_reply` prompt automatically proposes times when you're actually free
+- Follows the "always offer 2 time slot options" protocol from the AI directive
+
+**Impact**: These enhancements transform basic email drafting into a sophisticated, context-aware system that maintains professional standards and personal voice while saving time.
+
+---
+
 ## Project Milestones
 
 ### Core Requirements
@@ -39,14 +85,7 @@ This project is a Model Context Protocol (MCP) server that enables AI assistants
 - [x] **Email Retrieval Tool**: `get_unread_emails` with required fields
 - [x] **Draft Reply Tool**: `create_draft_reply` with threading
 - [x] **Claude Desktop Integration**: Local server configuration and testing
-- [ ] **Documentation**: Setup instructions, example prompts, screenshots
-
-### Stretch Goals
-
-- [x] **Email Style Guide Integration**: Pull writing guidelines from Google Docs ✅
-- [x] **Reply Templates**: Integrate templates from local files (with Google Docs support) ✅
-- [x] **Knowledge Base Context**: Enhance replies with the 7 Cs framework and AI directive ✅
-- [x] **MCP Resources**: Expose email guidelines as MCP resources ✅
+- [x] **Documentation**: Setup instructions, example prompts, screenshots
 
 ## Quick Start
 
@@ -66,26 +105,84 @@ This project is a Model Context Protocol (MCP) server that enables AI assistants
 
 ### Claude Desktop Configuration
 
-Add this to your Claude Desktop config file (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
+#### Step 1: Locate Your Config File
+
+The config file location depends on your operating system:
+
+- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows**: `%APPDATA%/Claude/claude_desktop_config.json`
+- **Linux**: `~/.config/Claude/claude_desktop_config.json`
+
+#### Step 2: Add MCP Server Configuration
+
+Add this to your `claude_desktop_config.json` file:
 
 ```json
 {
   "mcpServers": {
     "gmail_mcp_server": {
-      "command": "root_path_to/gmail-mcp/venv/bin/python",
-      "args": ["root_path_to/gmail-mcp/main.py"]
+      "command": "/Users/YOUR_USERNAME/path/to/gmail-mcp/.venv/bin/python",
+      "args": ["/Users/YOUR_USERNAME/path/to/gmail-mcp/main.py"]
     }
   }
 }
 ```
 
-**Important**: Replace `/absolute/path/to/gmail-mcp` with the actual path to your project directory.
+**Important**: Replace the paths with your actual absolute paths:
 
-After updating the config:
+1. Find your project directory: `pwd` (when in the gmail-mcp directory)
+2. Update both the `command` path (to Python in .venv) and `args` path (to main.py)
 
-1. Save the file
-2. Restart Claude Desktop
-3. On first use, you'll be prompted to authenticate with Google OAuth
+**Example (macOS)**:
+```json
+{
+  "mcpServers": {
+    "gmail_mcp_server": {
+      "command": "/Users/johndoe/projects/gmail-mcp/.venv/bin/python",
+      "args": ["/Users/johndoe/projects/gmail-mcp/main.py"]
+    }
+  }
+}
+```
+
+**Example (Windows)**:
+```json
+{
+  "mcpServers": {
+    "gmail_mcp_server": {
+      "command": "C:\\Users\\johndoe\\projects\\gmail-mcp\\.venv\\Scripts\\python.exe",
+      "args": ["C:\\Users\\johndoe\\projects\\gmail-mcp\\main.py"]
+    }
+  }
+}
+```
+
+#### Step 3: Restart and Authenticate
+
+1. **Save** the config file
+2. **Restart** Claude Desktop completely (quit and reopen)
+3. **Verify connection**: Look for the 🔌 icon in Claude Desktop indicating MCP servers are connected
+4. **First-time authentication**: On first use, a browser window will open asking you to:
+   - Sign in to your Google account
+   - Grant permissions for Gmail read and compose access
+   - The server will save a `token.json` file in the `credentials/` directory
+
+#### Troubleshooting
+
+**Server not connecting?**
+- Verify paths are absolute (not relative like `~/` or `./`)
+- Check Python virtual environment is activated and dependencies installed
+- Look at Claude Desktop logs: `~/Library/Logs/Claude/mcp*.log` (macOS)
+
+**Authentication failing?**
+- Ensure `credentials.json` is in the `credentials/` directory
+- Delete `credentials/token.json` and retry to re-authenticate
+- Verify Gmail API is enabled in Google Cloud Console
+- Check OAuth scopes include `gmail.readonly` and `gmail.compose`
+
+**Server crashes on startup?**
+- Run manually to see errors: `.venv/bin/python main.py`
+- Check all dependencies installed: `uv sync`
 
 ## Email Writing Guidelines (MCP Resources)
 
@@ -211,13 +308,39 @@ Draft a reply to John's email using my AI drafting directive and the 7 Cs framew
 I need to apologize for the delayed report and explain it's now complete.
 ```
 
-📝 **Note**: After drafting, check your Gmail drafts folder to review before sending.
+**Note**: After drafting, check your Gmail drafts folder to review before sending.
 
 For more example prompts, see [docs/example-prompts.md](docs/example-prompts.md)
 
+### Demo Video
+
+Watch the Gmail MCP Server in action:
+
+https://github.com/user-attachments/assets/demo_mcp.mov
+
+The demo shows:
+-  Getting unread emails from Gmail
+-  Creating draft replies with threading
+
 ### Screenshots
 
-Coming soon!
+#### MCP Server Connected in Claude Desktop
+![MCP Server Connection](./screenshots/Screenshot%202025-12-15%20at%2014.33.55.png)
+
+#### Fetching Unread Emails
+![Getting Unread Emails](./screenshots/Screenshot%202025-12-15%20at%2014.35.10.png)
+
+#### Drafting Professional Reply with 7 Cs Framework
+![Draft Professional Reply](./screenshots/Screenshot%202025-12-15%20at%2015.05.32.png)
+
+#### Using Personal Email Templates
+![Email Templates](./screenshots/Screenshot%202025-12-15%20at%2015.06.38.png)
+
+#### MCP Prompts in Action
+![MCP Prompts](./screenshots/Screenshot%202025-12-15%20at%2015.19.27.png)
+
+#### Draft Reply Created in Gmail
+![Gmail Draft](./screenshots/Screenshot%202025-12-15%20at%2015.19.31.png)
 
 ## MCP Prompts
 
@@ -297,4 +420,6 @@ Use suggest_template with thread_id="def456"
 - `schedule_meeting_reply` uses 3 resources (7 Cs, AI directive, calendar availability)
 - `suggest_template` uses 1 primary resource (email templates)
 
-## Project status: 🧑‍💻 In development
+## Project Status: 🧪 Testing
+
+All core requirements and stretch goals have been successfully implemented and tested.
