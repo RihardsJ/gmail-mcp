@@ -219,4 +219,82 @@ For more example prompts, see [docs/example-prompts.md](docs/example-prompts.md)
 
 Coming soon!
 
+## MCP Prompts
+
+This server provides three sophisticated prompts that leverage advanced prompt engineering techniques:
+
+### 1. `draft_professional_reply` - Multi-Step Chain + Role Prompting
+
+**Purpose:** Generate professional email replies following the 7 Cs framework and your personal AI directive using chain of thought reasoning.
+
+**Arguments:**
+- `thread_id` (required): The email thread ID to reply to
+- `key_points` (optional): Key points to include in the reply
+- `tone` (optional): Desired tone - formal, professional, or friendly (default: professional)
+
+**Prompt Engineering Technique:** Chain of Thought
+- 7-step reasoning process from context retrieval to draft creation
+- Applies consistent persona from AI directive
+- Validates against 7 Cs checklist
+- UK English formatting
+
+**Example Usage:**
+```
+Use draft_professional_reply with thread_id="abc123", key_points="confirm meeting availability", tone="professional"
+```
+
+### 2. `schedule_meeting_reply` - Contextual + Calendar Integration
+
+**Purpose:** Draft meeting acceptance or proposal with real-time calendar availability context.
+
+**Arguments:**
+- `thread_id` (required): The meeting request email thread ID
+- `date_range_start` (required): Start date for availability check (ISO format: YYYY-MM-DD)
+- `date_range_end` (required): End date for availability check (ISO format: YYYY-MM-DD)
+- `proposed_times` (optional): Optional specific times to propose
+
+**Prompt Engineering Technique:** Contextual Prompting
+- Integrates live calendar availability data
+- Enforces AI directive's "2 time slots" scheduling protocol
+- UK date/time format with timezone (BST/GMT)
+- Contextual reasoning based on meeting request
+
+**Example Usage:**
+```
+Use schedule_meeting_reply with thread_id="xyz789", date_range_start="2025-12-16", date_range_end="2025-12-20"
+```
+
+### 3. `suggest_template` - Few-Shot Learning
+
+**Purpose:** Analyze an email and suggest the most appropriate personal template from your collection of 11 templates.
+
+**Arguments:**
+- `thread_id` (required): The email thread ID to analyze
+
+**Prompt Engineering Technique:** Few-Shot Learning
+- Pattern matching against 11 personal templates
+- Confidence scoring (0-100%)
+- Explains reasoning for template selection
+- Shows customization fields needed
+- Provides populated template preview
+
+**Example Usage:**
+```
+Use suggest_template with thread_id="def456"
+```
+
+### Resource Usage Matrix
+
+| Prompt | 7 Cs Framework | Email Templates | AI Directive | Calendar Availability |
+|--------|----------------|-----------------|--------------|----------------------|
+| **draft_professional_reply** | ✅ Yes | ✅ Yes (optional) | ✅ Yes | ❌ No |
+| **schedule_meeting_reply** | ✅ Yes | ❌ No | ✅ Yes | ✅ Yes |
+| **suggest_template** | ❌ No | ✅ Yes | ❌ No | ❌ No |
+
+**Summary:**
+- All prompts access at least 2 resources
+- `draft_professional_reply` uses 3 resources (7 Cs, AI directive, optionally templates)
+- `schedule_meeting_reply` uses 3 resources (7 Cs, AI directive, calendar availability)
+- `suggest_template` uses 1 primary resource (email templates)
+
 ## Project status: 🧑‍💻 In development

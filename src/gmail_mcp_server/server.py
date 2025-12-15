@@ -7,6 +7,7 @@ from mcp.server import Server
 from pydantic import AnyUrl, FileUrl
 
 from .configs import configs
+from .prompts import draft_professional_reply, schedule_meeting_reply, suggest_template
 from .resources import get_calendar_availability, get_email_guidelines
 from .tools import create_draft_reply, get_unread_emails
 from .utils import format_to_rfc3339
@@ -126,3 +127,86 @@ async def handle_read_resource(
             return await get_email_guidelines("email_templates")
         case _:
             raise ValueError(f"Unknown resource: {uri_str}")
+
+
+@mcp_server.list_prompts()
+async def list_prompts() -> list[types.Prompt]:
+    return [
+        types.Prompt(
+            name="draft_professional_reply",
+            description="Generate professional email replies following the 7 Cs framework and your personal AI directive. Uses chain of thought and role prompting for consistent voice.",
+            arguments=[
+                types.PromptArgument(
+                    name="thread_id",
+                    description="The email thread ID to reply to",
+                    required=True,
+                ),
+                types.PromptArgument(
+                    name="key_points",
+                    description="Key points to include in the reply",
+                    required=False,
+                ),
+                types.PromptArgument(
+                    name="tone",
+                    description="Desired tone: formal, professional, or friendly",
+                    required=False,
+                ),
+            ],
+        ),
+        types.Prompt(
+            name="schedule_meeting_reply",
+            description="Draft meeting acceptance or proposal with calendar availability context. Automatically checks your calendar and proposes 2 time slots per your directive.",
+            arguments=[
+                types.PromptArgument(
+                    name="thread_id",
+                    description="The meeting request email thread ID",
+                    required=True,
+                ),
+                types.PromptArgument(
+                    name="date_range_start",
+                    description="Start date for availability check (ISO format)",
+                    required=True,
+                ),
+                types.PromptArgument(
+                    name="date_range_end",
+                    description="End date for availability check (ISO format)",
+                    required=True,
+                ),
+                types.PromptArgument(
+                    name="proposed_times",
+                    description="Optional specific times to propose",
+                    required=False,
+                ),
+            ],
+        ),
+        types.Prompt(
+            name="suggest_template",
+            description="Analyze an email and suggest the most appropriate personal template from your collection of 11 templates using few-shot learning.",
+            arguments=[
+                types.PromptArgument(
+                    name="thread_id",
+                    description="The email thread ID to analyze",
+                    required=True,
+                )
+            ],
+        ),
+    ]
+
+
+@mcp_server.get_prompt()
+async def get_prompt(
+    name: str, arguments: dict[str, str] | None = None
+) -> types.GetPromptResult:
+    if arguments is None:
+        arguments = {}
+
+    match name:
+        case "draft_professional_reply":
+            return await draft_professional_reply(arguments)
+        case "schedule_meeting_reply":
+            return await schedule_meeting_reply(arguments)
+        case "suggest_template":
+            return await suggest_template(arguments)
+
+        case _:
+            raise ValueError(f"Unknown prompt: {name}")
