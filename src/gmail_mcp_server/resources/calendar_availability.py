@@ -62,24 +62,61 @@ async def get_calendar_availability(
 
         logger.info(f"Found {len(calendar_ids)} calendars")
 
-        # TODO: Implement actual availability check using freebusy query
-        # For now, return calendar IDs
-        result = (
-            f"TODO: implement availability check\n"
-            f"Time range: {start_date_time_str} to {end_date_time_str}\n"
-            f"Calendar IDs: {', '.join(calendar_ids)}"
+        # Query freebusy information for all calendars
+        # Reference: https://developers.google.com/workspace/calendar/api/v3/reference/freebusy/query
+        logger.info("Querying freebusy information")
+        freebusy_query = {
+            "timeMin": start_date_time_str,
+            "timeMax": end_date_time_str,
+            "items": [{"id": cal_id} for cal_id in calendar_ids],
+        }
+
+        freebusy_result = (
+            google_calendar_service.freebusy().query(body=freebusy_query).execute()
         )
 
-        logger.info("Successfully retrieved calendar information")
-        return result
+        # Format the availability results
+        calendars_info = freebusy_result.get("calendars", {})
+
+        availability_message = "# Calendar Availability\n\n"
+        availability_message += (
+            f"**Time Range:** {start_date_time_str} to {end_date_time_str}\n\n"
+        )
+
+        for cal_id, cal_data in calendars_info.items():
+            busy_periods = cal_data.get("busy", [])
+
+            # Get calendar name from the list
+            cal_name = next(
+                (
+                    cal.get("summary", cal_id)
+                    for cal in calendar_list_result.get("items", [])
+                    if cal.get("id") == cal_id
+                ),
+                cal_id,
+            )
+
+            availability_message += f"## {cal_name}\n"
+
+            if not busy_periods:
+                availability_message += "**Free** - No busy periods\n\n"
+            else:
+                availability_message += (
+                    f"**Busy** - {len(busy_periods)} busy period(s):\n"
+                )
+                for period in busy_periods:
+                    start = period.get("start", "N/A")
+                    end = period.get("end", "N/A")
+                    availability_message += f"  - {start} to {end}\n"
+                availability_message += "\n"
+
+        logger.info("Successfully retrieved calendar availability")
+        return availability_message
 
     except HttpError as e:
         error_msg = f"Google Calendar API Error: {str(e)}"
         logger.error(error_msg)
         raise GoogleCalendarAPIError(error_msg)
-    except ValueError as e:
-        # Re-raise ValueError as-is
-        raise
     except Exception as e:
         error_msg = f"Unexpected Error retrieving calendar availability: {str(e)}"
         logger.error(error_msg)
