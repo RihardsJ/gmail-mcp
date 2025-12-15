@@ -154,6 +154,7 @@ By default, resources are read from local markdown files in the `docs/` director
 4. Add Google Docs scope to settings.toml:
    ```toml
    google_scopes = [
+       "https://www.googleapis.com/auth/calendar.calendarlist.readonly",
        "https://www.googleapis.com/auth/calendar.events.freebusy",
        "https://www.googleapis.com/auth/drive.readonly",
        "https://www.googleapis.com/auth/gmail.readonly",

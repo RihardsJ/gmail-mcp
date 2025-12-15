@@ -5,7 +5,7 @@ max_email_limit = 5
 host = "0.0.0.0"
 port = 8100
 log_level = "info"
-google_scopes = ["https://www.googleapis.com/auth/calendar.events.freebusy", "https://www.googleapis.com/auth/drive.readonly", "https://www.googleapis.com/auth/gmail.readonly", "https://www.googleapis.com/auth/gmail.compose"]
+google_scopes = ["https://www.googleapis.com/auth/calendar.calendarlist.readonly", "https://www.googleapis.com/auth/calendar.events.freebusy", "https://www.googleapis.com/auth/drive.readonly", "https://www.googleapis.com/auth/gmail.readonly", "https://www.googleapis.com/auth/gmail.compose"]
 
 
 [default.google_docs]
