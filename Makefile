@@ -3,7 +3,8 @@
 # Default target
 help:
 	@echo "Available commands:"
-	@echo "  make activate        - Activate the virtual environment"
+	@echo "  make setup           - Setup the virtual environment and install dependencies"
+	@echo "  make install         - Install dependencies"
 	@echo "  make inspector       - Run MCP Inspector"
 	@echo "  make clean           - Remove Python cache files"
 	@echo "  make settings        - Show command and argument values"
@@ -18,10 +19,12 @@ help:
 	@echo "Git hooks:"
 	@echo "  make install-hooks   - Install git hooks (pre-push tests)"
 
-# Activate virtual environment
-activate:
-	python -m venv venv
-	source venv/bin/activate
+# Prepare virtual environment and install dependencies
+setup:
+	rm -rf venv .venv
+	uv venv
+	uv sync --extra dev
+	uv pip install -e .
 
 # MCP Inspector
 inspector:
@@ -32,7 +35,7 @@ settings:
 	@echo "{"
 	@echo "  \"mcpServers\": {"
 	@echo "    \"gmail_mcp_server\": {"
-	@echo "      \"command\": \"$(PWD)/venv/bin/python\","
+	@echo "      \"command\": \"$(PWD)/.venv/bin/python\","
 	@echo "      \"args\": [\"$(PWD)/main.py\"]"
 	@echo "    }"
 	@echo "  }"

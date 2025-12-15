@@ -6,7 +6,7 @@ import logging
 import mcp.types as types
 from googleapiclient.errors import HttpError
 
-from ..services.gmail_api_service import get_gmail_api_service
+from ..services import get_gmail_api_service
 from ..utils import format_email_for_display
 
 logger = logging.getLogger(__name__)

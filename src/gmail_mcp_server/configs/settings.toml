@@ -5,4 +5,10 @@ max_email_limit = 5
 host = "0.0.0.0"
 port = 8100
 log_level = "info"
-gmail_api_scopes = ["https://www.googleapis.com/auth/gmail.readonly", "https://www.googleapis.com/auth/gmail.compose"]
+google_scopes = ["https://www.googleapis.com/auth/calendar.calendarlist.readonly", "https://www.googleapis.com/auth/calendar.events.freebusy", "https://www.googleapis.com/auth/drive.readonly", "https://www.googleapis.com/auth/gmail.readonly", "https://www.googleapis.com/auth/gmail.compose"]
+
+
+[default.google_docs]
+7cs_doc_id = "1fCgK_HNKDboBV2FcuMRXLTl4UJeDxw8n_xUqCDacZEs"
+email_templates_doc_id = "13FlPX7Cxg7H3pyI-wet6t6IeZOtph9zFJ0RDTSa6HBE"
+directive_doc_id = "1j6GcH_DLT7CBFJ3ML4anz4OF8ofkfDkUoR7HnHFNT2A"

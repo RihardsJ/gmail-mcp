@@ -9,7 +9,7 @@ import mcp.types as types
 from googleapiclient.errors import HttpError
 
 from ..configs import configs
-from ..services.gmail_api_service import get_gmail_api_service
+from ..services import get_gmail_api_service
 from ..utils import (
     build_threading_headers,
     ensure_reply_subject,
